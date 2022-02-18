@@ -26,4 +26,4 @@ def refresh():
     return jsonify(labels = const.KEYWORDS, data = savedData)
 
 if __name__ == "__main__":
-    app.run(host='localhost', port=os.environ.get('PORT', 80))
+    app.run(host='localhost', port=os.environ.get('PORT', 443))

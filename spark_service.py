@@ -7,7 +7,7 @@ import json
 import const
 import requests
 
-UPDATE_DATA_URL = 'http://localhost:80/update'
+UPDATE_DATA_URL = 'https://localhost/update'
 
 conf = SparkConf()
 conf.setAppName("YouTubeCommentsStreaming")

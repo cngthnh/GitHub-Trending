@@ -9,14 +9,15 @@ RUN pip install -r requirements.txt
 COPY . /app
 
 # Expose port 80
-EXPOSE 80
-ENV PORT 80
+EXPOSE 443
+ENV PORT 443
 
 # Set the WORKDIR to be the app folder
 WORKDIR /app
 
 # Set JAVA_HOME
-RUN apt-get update && \
+RUN chmod +x run.sh && \
+    apt-get update && \
     apt install -y software-properties-common && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EA8CACC073C3DB2A && \
     add-apt-repository ppa:linuxuprising/java && \
