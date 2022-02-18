@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>GitHub Language Trending in the last 6 months</title>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js'></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    </head>
+
+    <body>
+        <center>
+            <div style="width:80%;">
+                <canvas id="chart"></canvas>
+            </div>
+        </center>
+
+        <script>
+           var ctx = document.getElementById("chart");
+           var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: []
+                },
+                options: {
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                        stacked: true,
+                        },
+                        y: {
+                            stacked: true
+                        }
+                    },
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'GitHub Language Trending in the last 6 months'
+                        }
+                    }
+                }
+           });
+
+           var labels = [];
+           var rawData = [];
+           var langs = [];
+           var colors = [];
+           var langsNum = 0;
+
+           var dynamicColors = function() {
+                var r = Math.floor(Math.random() * 165 + 50);
+                var g = Math.floor(Math.random() * 165 + 50);
+                var b = Math.floor(Math.random() * 165 + 50);
+                return "rgb(" + r + "," + g + "," + b + ")";
+            }
+
+            setInterval(function(){
+                $.getJSON('/refresh', {
+                }, function(data) {
+                    labels = data.labels;
+                    rawData = data.data;
+                });
+
+                myChart.data.labels = labels;
+                var langs = Object.keys(rawData);
+
+                if (colors.length < langs.length) {
+                    for (var i = 0; i < langs.length; i++) {
+                        colors[i] = dynamicColors();
+                    }
+                }
+                
+                for (var i = 0; i < langs.length; i++) {
+                    if (typeof myChart.data.datasets[i] == 'undefined' || langsNum < langs.length)
+                        myChart.data.datasets[i] = {
+                            label: langs[i],
+                            data: Object.values(rawData[langs[i]]),
+                            borderWidth: 1,
+                            backgroundColor: colors[i]
+                        }
+                    else myChart.data.datasets[i].data = Object.values(rawData[langs[i]]);
+                }
+
+                langsNum = langs.length;
+                
+                myChart.update();
+
+            },1000);
+        </script>
+    </body>
+</html>
