@@ -16,7 +16,8 @@ ENV PORT 443
 WORKDIR /app
 
 # Set JAVA_HOME
-RUN chmod +x run.sh && \
+RUN chmod +x *.sh && \
+    chmod +x *.py && \
     apt-get update && \
     apt install -y software-properties-common && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EA8CACC073C3DB2A && \
